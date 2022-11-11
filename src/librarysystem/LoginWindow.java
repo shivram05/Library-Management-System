@@ -1,5 +1,9 @@
 package src.librarysystem;
 
+import src.business.LoginException;
+import src.business.SystemController;
+import src.dataaccess.User;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -183,8 +187,16 @@ public class LoginWindow extends JFrame implements LibWindow {
     	private void addLoginButtonListener(JButton butn) {
     		butn.addActionListener(evt -> {
     			JOptionPane.showMessageDialog(this,"Successful Login");
-    				
-    		});
+
+				SystemController systemController = new SystemController();
+				try {
+					User data = systemController.login("101","xyz");
+					System.out.println(data);
+				} catch (LoginException e) {
+					throw new RuntimeException(e);
+				}
+
+			});
     	}
 	
         

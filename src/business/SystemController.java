@@ -4,26 +4,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import src.dataaccess.Auth;
-import src.dataaccess.DataAccess;
-import src.dataaccess.DataAccessFacade;
-import src.dataaccess.User;
+import src.dataaccess.*;
 
 public class SystemController implements ControllerInterface {
 	public static Auth currentAuth = null;
-	
-	public void login(String id, String password) throws LoginException {
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, User> map = da.readUserMap();
-		if(!map.containsKey(id)) {
-			throw new LoginException("ID " + id + " not found");
+
+	@Override
+	public User login(String id, String password) throws LoginException {
+
+		TestData test = new TestData();
+		List<User> users = test.allUsers;
+
+		User use = null;
+		for (User user : users) {
+			if (id.contains(user.getId()) && password.contains(user.getPassword())) {
+				use = user;
+				break;
+			}
 		}
-		String passwordFound = map.get(id).getPassword();
-		if(!passwordFound.equals(password)) {
-			throw new LoginException("Password incorrect");
-		}
-		currentAuth = map.get(id).getAuthorization();
-		
+		if (use == null)
+			throw new LoginException("Username or password incorrect!");
+		return use;
 	}
 	@Override
 	public List<String> allMemberIds() {
